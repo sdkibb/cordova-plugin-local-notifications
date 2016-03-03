@@ -23,6 +23,12 @@
 
 package de.appplant.cordova.plugin.localnotification;
 
+import org.json.JSONObject;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.lang.StringBuilder;
+
 import de.appplant.cordova.plugin.notification.Builder;
 import de.appplant.cordova.plugin.notification.Notification;
 
@@ -51,12 +57,15 @@ public class TriggerReceiver extends de.appplant.cordova.plugin.notification.Tri
 
         String conditional = "no";
         try {
+            StringBuilder sb = new StringBuilder();
             URL url = new URL("http://mobile.hc-sc.gc.ca/recallsv2/response.js");
             BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
             String strTemp = "";
             while (null != (strTemp = br.readLine())) {
-                conditional = strTemp;
+                sb.append(strTemp);
             }
+            JSONObject json = new JSONObject(sb.toString());
+            conditional = json.getString("message");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
