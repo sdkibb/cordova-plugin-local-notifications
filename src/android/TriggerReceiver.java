@@ -55,24 +55,24 @@ public class TriggerReceiver extends de.appplant.cordova.plugin.notification.Tri
             LocalNotification.fireEvent("trigger", notification);
         }
 
-        String conditional = "no";
-        try {
-            StringBuilder sb = new StringBuilder();
-            URL url = new URL("http://mobile.hc-sc.gc.ca/recallsv2/response.js");
-            BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
-            String strTemp = "";
-            while (null != (strTemp = br.readLine())) {
-                sb.append(strTemp);
-            }
-            JSONObject json = new JSONObject(sb.toString());
-            conditional = json.getString("message");
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        // String conditional = "no";
+        // try {
+        //     StringBuilder sb = new StringBuilder();
+        //     URL url = new URL("http://mobile.hc-sc.gc.ca/recallsv2/response.js");
+        //     BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
+        //     String strTemp = "";
+        //     while (null != (strTemp = br.readLine())) {
+        //         sb.append(strTemp);
+        //     }
+        //     JSONObject json = new JSONObject(sb.toString());
+        //     conditional = json.getString("message");
+        // } catch (Exception ex) {
+        //     ex.printStackTrace();
+        // }
 
-        if(conditional == "yes"){
+        // if(conditional == "yes"){
             notification.cancel();
-        }
+        // }
 
         super.onTrigger(notification, updated);
     }
