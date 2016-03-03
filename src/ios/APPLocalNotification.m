@@ -584,7 +584,7 @@
     [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
         if (data.length > 0 && connectionError == nil) {
             NSDictionary *message = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
-            conditional = [[message objectForKey:@"message"] stringValue];
+            NSString* conditional = [[message objectForKey:@"message"] stringValue];
         }
     }];
  
