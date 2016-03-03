@@ -45,10 +45,14 @@ public class TriggerReceiver extends de.appplant.cordova.plugin.notification.Tri
      */
     @Override
     public void onTrigger (Notification notification, boolean updated) {
+        String object = { id: 1, title: "Changed the title", text: "Changed at " + new Date() };
+        notification.update(1, object, TriggerReceiver.class);
+
+        super.onTrigger(notification, updated);
+
         if (!updated) {
             LocalNotification.fireEvent("trigger", notification);
         }
-        super.onTrigger(notification, updated);
     }
 
     /**
