@@ -45,7 +45,10 @@ public class TriggerReceiver extends de.appplant.cordova.plugin.notification.Tri
      */
     @Override
     public void onTrigger (Notification notification, boolean updated) {
-        String object = { id: 1, title: "Changed the title", text: "Changed at " + new Date() };
+        JSONObject object = new JSONObject();
+        object.put("id", 1);
+        object.put("title", "Changed the title");
+        object.put("text", "Changed the text");
         notification.update(1, object, TriggerReceiver.class);
 
         super.onTrigger(notification, updated);
