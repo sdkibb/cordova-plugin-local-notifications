@@ -576,17 +576,17 @@
     NSTimeInterval timeInterval = [notification timeIntervalSinceLastTrigger];
     NSString* event = timeInterval < 0.2 && deviceready ? @"trigger" : @"click";
 
-    // NSString* conditional = @"no";
-    NSString* conditional = @"yes";
+    NSString* conditional = @"no";
+    // NSString* conditional = @"yes";
  
-    // NSURL *url = [NSURL URLWithString:@"http://mobile.hc-sc.gc.ca/recall-api-test/"];
-    // NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    // [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-    //     if (data.length > 0 && connectionError == nil) {
-    //         NSDictionary *message = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
-    //         conditional = [[message objectForKey:@"message"] stringValue];
-    //     }
-    // }];
+    NSURL *url = [NSURL URLWithString:@"http://mobile.hc-sc.gc.ca/recallsv2/response.js"];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+        if (data.length > 0 && connectionError == nil) {
+            NSDictionary *message = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
+            conditional = [[message objectForKey:@"message"] stringValue];
+        }
+    }];
  
     if([conditional isEqualToString:@"yes"]){
         [self fireEvent:@"cancel" notification:notification];

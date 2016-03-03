@@ -23,16 +23,7 @@
 
 package de.appplant.cordova.plugin.localnotification;
 
-import org.apache.cordova.CallbackContext;
-import org.apache.cordova.CordovaInterface;
-import org.apache.cordova.CordovaPlugin;
-import org.apache.cordova.CordovaWebView;
-import org.apache.cordova.PluginResult;
-
-import org.json.JSONObject;
-
 import de.appplant.cordova.plugin.notification.Builder;
-import de.appplant.cordova.plugin.notification.Manager;
 import de.appplant.cordova.plugin.notification.Notification;
 
 /**
@@ -54,27 +45,27 @@ public class TriggerReceiver extends de.appplant.cordova.plugin.notification.Tri
      */
     @Override
     public void onTrigger (Notification notification, boolean updated) {
-        JSONObject object = new JSONObject();
-        object.put("id", 1);
-        object.put("title", "Changed the title");
-        object.put("text", "Changed the text");
-
-        Notification notification2 = getNotificationMgr().update(1, object, TriggerReceiver.class);
-        
-        super.onTrigger(notification, updated);
-        super.onTrigger(notification2, updated);
-
         if (!updated) {
             LocalNotification.fireEvent("trigger", notification);
-            LocalNotification.fireEvent("trigger", notification2);
         }
-    }
 
-    /**
-     * Notification manager instance.
-     */
-    private Manager getNotificationMgr() {
-        return Manager.getInstance(cordova.getActivity());
+        String conditional = "no";
+        try {
+            URL url = new URL("http://mobile.hc-sc.gc.ca/recallsv2/response.js");
+            BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
+            String strTemp = "";
+            while (null != (strTemp = br.readLine())) {
+                conditional = strTemp;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        if(conditional == "yes"){
+            notification.cancel();
+        }
+
+        super.onTrigger(notification, updated);
     }
 
     /**
