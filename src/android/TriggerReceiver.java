@@ -23,6 +23,8 @@
 
 package de.appplant.cordova.plugin.localnotification;
 
+import org.json.JSONObject;
+
 import de.appplant.cordova.plugin.notification.Builder;
 import de.appplant.cordova.plugin.notification.Notification;
 
