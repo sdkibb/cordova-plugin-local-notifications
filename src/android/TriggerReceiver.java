@@ -45,8 +45,9 @@ public class TriggerReceiver extends de.appplant.cordova.plugin.notification.Tri
      */
     @Override
     public void onTrigger (Notification notification, boolean updated) {
-        notification.cancel();
-        // super.onTrigger(notification, updated);
+        alert('before trigger');
+        super.onTrigger(notification, updated);
+        alert('after trigger');
         if (!updated) {
             LocalNotification.fireEvent("trigger", notification);
         }
