@@ -23,8 +23,6 @@
 
 package de.appplant.cordova.plugin.localnotification;
 
-import org.json.JSONObject;
-
 import de.appplant.cordova.plugin.notification.Builder;
 import de.appplant.cordova.plugin.notification.Notification;
 
@@ -47,17 +45,15 @@ public class TriggerReceiver extends de.appplant.cordova.plugin.notification.Tri
      */
     @Override
     public void onTrigger (Notification notification, boolean updated) {
-        JSONObject object = new JSONObject();
-        object.put("id", 1);
-        object.put("title", "Changed the title");
-        object.put("text", "Changed the text");
-        notification.update(1, object, TriggerReceiver.class);
-
+        JOptionPane.showMessageDialog(null, "Fired before show()");
         super.onTrigger(notification, updated);
+        JOptionPane.showMessageDialog(null, "Fired after show()");
 
+        JOptionPane.showMessageDialog(null, "Fired before trigger");
         if (!updated) {
             LocalNotification.fireEvent("trigger", notification);
         }
+        JOptionPane.showMessageDialog(null, "Fired before trigger");
     }
 
     /**
