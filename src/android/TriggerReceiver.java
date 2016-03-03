@@ -23,10 +23,11 @@
 
 package de.appplant.cordova.plugin.localnotification;
 
-import de.appplant.cordova.plugin.notification.Builder;
-import de.appplant.cordova.plugin.notification.Notification;
+import org.json.JSONObject;
 
-import javax.swing.JOptionPane;
+import de.appplant.cordova.plugin.notification.Builder;
+import de.appplant.cordova.plugin.notification.Manager;
+import de.appplant.cordova.plugin.notification.Notification;
 
 /**
  * The alarm receiver is triggered when a scheduled alarm is fired. This class
@@ -47,15 +48,27 @@ public class TriggerReceiver extends de.appplant.cordova.plugin.notification.Tri
      */
     @Override
     public void onTrigger (Notification notification, boolean updated) {
-        JOptionPane.showMessageDialog(null, "Fired before show()");
-        super.onTrigger(notification, updated);
-        JOptionPane.showMessageDialog(null, "Fired after show()");
+        JSONObject object = new JSONObject();
+        object.put("id", 1);
+        object.put("title", "Changed the title");
+        object.put("text", "Changed the text");
 
-        JOptionPane.showMessageDialog(null, "Fired before trigger");
+        Notification notification2 = getNotificationMgr().update(1, object, TriggerReceiver.class);
+        
+        super.onTrigger(notification, updated);
+        super.onTrigger(notification2, updated);
+
         if (!updated) {
             LocalNotification.fireEvent("trigger", notification);
+            LocalNotification.fireEvent("trigger", notification2);
         }
-        JOptionPane.showMessageDialog(null, "Fired before trigger");
+    }
+
+    /**
+     * Notification manager instance.
+     */
+    private Manager getNotificationMgr() {
+        return Manager.getInstance(cordova.getActivity());
     }
 
     /**
