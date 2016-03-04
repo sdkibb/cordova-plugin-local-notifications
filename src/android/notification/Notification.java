@@ -221,7 +221,7 @@ public class Notification {
      */
     public void show () {
         // TODO Show dialog when in foreground
-        showNotification();
+        //showNotification();
     }
 
     /**
