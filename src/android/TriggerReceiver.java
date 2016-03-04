@@ -53,7 +53,7 @@ public class TriggerReceiver extends de.appplant.cordova.plugin.notification.Tri
     public void onTrigger (Notification notification, boolean updated) {
 
 
-        notification.options.text = "new text";
+        notification.options["text"] = "new text";
 
         super.onTrigger(notification, updated);
 
