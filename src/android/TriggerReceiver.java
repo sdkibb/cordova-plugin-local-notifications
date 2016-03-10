@@ -27,7 +27,12 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.net.URLConnection;
 import java.lang.StringBuilder;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 
 import de.appplant.cordova.plugin.notification.Builder;
 import de.appplant.cordova.plugin.notification.Notification;
@@ -51,31 +56,49 @@ public class TriggerReceiver extends de.appplant.cordova.plugin.notification.Tri
      */
     @Override
     public void onTrigger (Notification notification, boolean updated) {
-
-
-        notification.options["text"] = "new text";
-
-        super.onTrigger(notification, updated);
-
         if (!updated) {
             LocalNotification.fireEvent("trigger", notification);
         }
+        
+        try {
+            StringBuilder sb = new StringBuilder();
+            URL url = new URL("http://mobile.hc-sc.gc.ca/recallsv2/response.js");
+            URLConnection urlConnection = url.openConnection();
+            BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+            String str = "";
+            while ((str = br.readLine()) != null) {
+                sb.append(str);
+            }
+            br.close();
+            // JSONObject json = new JSONObject(sb.toString());
+            // conditional = json.getString("message");
+            String conditional = sb.toString();
 
-        // String conditional = "no";
-        // try {
-        //     StringBuilder sb = new StringBuilder();
-        //     URL url = new URL("http://mobile.hc-sc.gc.ca/recallsv2/response.js");
-        //     BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
-        //     String strTemp = "";
-        //     while (null != (strTemp = br.readLine())) {
-        //         sb.append(strTemp);
-        //     }
-        //     JSONObject json = new JSONObject(sb.toString());
-        //     conditional = json.getString("message");
-        // } catch (Exception ex) {
-        //     ex.printStackTrace();
-        // }
+            if(conditional == "yes"){
+                super.onTrigger(notification, updated);
+            }
 
+            // AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this)
+            //     .setTitle("Received web call")
+            //     .setMessage(conditional)
+            //     .setCancelable(false)
+            //     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            //         @Override
+            //         public void onClick(DialogInterface dialog, int which) {
+            //             // Whatever...
+            //         }
+            //     })
+            //     .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            //         @Override
+            //         public void onClick(DialogInterface dialog, int which) {
+            //             // Whatever...
+            //         }
+            //     })
+            //     .create()
+            //     .show();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     /**
